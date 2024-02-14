@@ -63,3 +63,32 @@ window.onload = function() {
             
         });
 };
+
+function updatePokemon(e) {
+    // console.log(pokedex[this.id]);
+    const previousSelected = document.querySelector('.selected');
+    if (previousSelected) {
+        previousSelected.classList.remove('selected');
+    } e.target.classList.add('selected'); // this is what highlights the selected pokemon as blue in the pokedex.
+
+    document.getElementById("pokemon-img").src = pokedex[e.target.id]["img"];
+    
+    //clear previous type
+    let typesDiv = document.getElementById("pokemon-types");
+       while (typesDiv.firstChild) {
+        typesDiv.firstChild.remove();
+    };
+    //update type
+    let types = pokedex[e.target.id]["types"];
+    // console.log(types);
+    for (let i = 0;i< types.length; i++) {
+        // console.log(types[i]);
+        let type = document.createElement("span");
+        type.innerText = types[i].toUpperCase();
+        type.classList.add("type-box");
+        type.classList.add(types[i]);
+        typesDiv.append(type);
+    };
+    //update description
+    document.getElementById("pokemon-description").innerText = pokedex[e.target.id]["desc"];
+}
