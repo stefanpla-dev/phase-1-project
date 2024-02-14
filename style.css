@@ -5,14 +5,16 @@ body {
 }
 
 #content-box {
-    width: 780px;
-    height: 582px;
+    width: 500px;
+    height: 500px;
+    border: 10px solid lightgrey;
+    border-radius: 10px;
    
 
     /* background-color: green; */
     display: flex;
     margin: 0 auto;
-    margin-top:120px;
+    margin-top:60px;
 
     /* background: url("./dex1.jpg") no-repeat;
     background-size: cover; */
@@ -20,17 +22,17 @@ body {
 }
 
 #pokemon-info {
-    width: 266px;
+    width: 250px;
     height: 500px;
-    /* background-color: cyan; */
-    text-align: center;
+    background-color: cyan;
+    text-align: left;
 }
 
 #pokemon-list {
     width: 250px;
-    height: 200px;
-    /* background-color: yellow; */
-    font-size: 16px;
+    height: 500px;
+    background-color: yellow;
+    font-size: 18px;
     overflow-y: auto;
 }
 
@@ -44,16 +46,18 @@ body {
 }
 
 #pokemon-info img {
-    width: 160px;
-    height: 160px;
+    width: 235px;
+    height: 235px;
     border: 1px solid black;
     border-radius: 10px;
-    margin-top: 20px;
+    margin-top: 5px;
+    margin-left: 5px;
     background-color: white;
 }
 
 #pokemon-types {
     margin-top: 10px;
+    margin-left: 5px;
 }
 
 .type-box {
@@ -130,7 +134,7 @@ body {
 }
 
 .dark {
-    background-color: darkgray;
+    background-color: rgb(57, 45, 45);
     color: white;
 }
 
@@ -156,7 +160,7 @@ body {
 
 #pokemon-description {
     width: 230px;
-    height: 100px;
+    height: 135px;
     background-color: white;
     border: 1px solid black;
     border-radius: 10px;
@@ -166,4 +170,8 @@ body {
     padding: 2px;
     font-size: 18px;
     overflow-y: auto;
+}
+
+.selected {
+    background-color: aqua;
 }
