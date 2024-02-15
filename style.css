@@ -1,12 +1,16 @@
 body {
-    /* background: url("./pokedexW.jpg") no-repeat;
-    background-size: cover; */
+    background: url("./Pika.jpg") no-repeat;
+    background-size: cover;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 #content-box {
     width: 780px;
     height: 582px;
+    display: flex;
+    flex-direction: row; /* Horizontally center the content */
+    justify-content:space-around;
+    align-items: center; /* Vertically center the content */
    
 
     /* background-color: green; */
@@ -14,8 +18,8 @@ body {
     margin: 0 auto;
     margin-top:120px;
 
-    /* background: url("./FinalDex.jpg") no-repeat;
-    background-size: cover; */
+    background: url("./FinalDex.jpg") no-repeat;
+    background-size: cover;
     
 }
 
@@ -24,14 +28,16 @@ body {
     height: 500px;
     /* background-color: cyan; */
     text-align: center;
+    margin-top: 190px;
 }
 
 #pokemon-list {
-    width: 250px;
-    height: 200px;
+    width: 220px;
+    height: 335px;
     /* background-color: yellow; */
     font-size: 16px;
     overflow-y: auto;
+    margin-top: 95px;
 }
 
 .pokemon-name {
@@ -46,7 +52,7 @@ body {
 #pokemon-info img {
     width: 160px;
     height: 160px;
-    border: 1px solid black;
+    border: 1px solid white;
     border-radius: 10px;
     margin-top: 20px;
     background-color: white;
