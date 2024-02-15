@@ -10,8 +10,7 @@ function getPokemon(num) {
     
     return fetch (url)
     .then(response => response.json())
-    // .then(pokemon => console.log(pokemon))
-    .then (pokemon => {
+    .then(pokemon => {
         let pokemonName = pokemon.name;
         let pokemonImg = pokemon.sprites.front_default;
         let pokemonBackImg = pokemon.sprites.back_default; 
@@ -22,10 +21,10 @@ function getPokemon(num) {
         return fetch(speciesUrl) // description of each Pokemon is obtained from a different API endpoint than the rest of the Pokemon data. 
         .then(response => response.json())
         .then(species => {
-            // console.log(species);
+
             let englishDescription = species.flavor_text_entries.find(entry => entry.language.name === "en");
             let pokemonDescription = englishDescription.flavor_text;
-            // console.log(pokemonDescription);
+
             pokedex[num] = { // store fetched data in the pokedex object originally defined above
               "name" : pokemonName, 
               "img" : pokemonImg, 
@@ -34,7 +33,6 @@ function getPokemon(num) {
               "desc" : pokemonDescription, 
               "id" : pokemonId
             }
-            // console.log(pokedex[num]);
           });
         });
 };
@@ -67,13 +65,13 @@ window.onload = function() {
     };
     
     function updatePokemon(e) {
-        // console.log(pokedex[e.target.id])
         selectedPokemon = pokedex[e.target.id]
         
+        //highlight selected Pokemon as blue - see style.css
         const previousSelected = document.querySelector('.selected');
         if (previousSelected) {
             previousSelected.classList.remove('selected');
-        } e.target.classList.add('selected'); // this is what highlights the selected pokemon as blue in the pokedex.
+        } e.target.classList.add('selected'); 
         
         document.getElementById("pokemon-img").src = pokedex[e.target.id]["img"];
         
