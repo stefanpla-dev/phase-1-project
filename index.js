@@ -1,64 +1,113 @@
-const pokemonCount = 50;
-var pokedex = {}; // {1 : {"name" : "bulbsaur", "img" : url, "type" : ["grass", "poison"], "desc" : "...."} }
+const pokemonCount = 151;
+// can change the number above to load different number of Pokemon into the Pokedex. 
 
-window.onload = async function() {
-    // getPokemon(1);
-    for (let i = 1; i <= pokemonCount; i++) {
-        await getPokemon(i);
-        //<div id="1" class="pokemon-name">BULBASAUR</div>
-        let pokemon = document.createElement("div");
-        pokemon.id = i;
-        pokemon.innerText = i.toString() + ". " + pokedex[i]["name"].toUpperCase();
-        pokemon.classList.add("pokemon-name");
-        pokemon.addEventListener("click", updatePokemon);
-        document.getElementById("pokemon-list").append(pokemon);
-    }
+const pokedex = {}; // using Bulbasaur as an example: {"name" : "bulbasaur", "img" : url, "type" : ["grass","poison"], "desc" : "....."} }
 
-    document.getElementById("pokemon-description").innerText = pokedex[1]["desc"];
+let selectedPokemon = {};
 
-    console.log(pokedex);
-}
-
-async function getPokemon(num) {
+function getPokemon(num) {
     let url = "https://pokeapi.co/api/v2/pokemon/" + num.toString();
+    
+    return fetch (url)
+    .then(response => response.json())
+    .then(pokemon => {
+        let pokemonName = pokemon.name;
+        let pokemonImg = pokemon.sprites.front_default;
+        let pokemonBackImg = pokemon.sprites.back_default; 
+        let pokemonType = pokemon.types.map(type => type.type.name);
+        let pokemonId = pokemon.id;
+        let speciesUrl = pokemon.species.url;
+        
+        return fetch(speciesUrl) // description of each Pokemon is obtained from a different API endpoint than the rest of the Pokemon data. 
+        .then(response => response.json())
+        .then(species => {
 
-    let res = await fetch(url);
-    let pokemon = await res.json();
-    // console.log(pokemon);
+            let englishDescription = species.flavor_text_entries.find(entry => entry.language.name === "en");
+            let pokemonDescription = englishDescription.flavor_text;
 
-    let pokemonName = pokemon["name"];
-    let pokemonType = pokemon["types"];
-    let pokemonImg = pokemon["sprites"]["front_default"];
+            pokedex[num] = { // store fetched data in the pokedex object originally defined above
+              "name" : pokemonName, 
+              "img" : pokemonImg, 
+              "backImg" : pokemonBackImg,
+              "types" : pokemonType, 
+              "desc" : pokemonDescription, 
+              "id" : pokemonId
+            }
+          });
+        });
+};
 
-    res = await fetch(pokemon["species"]["url"]);
-    let pokemonDesc = await res.json();
+window.onload = function() { 
+    // the code inside this function runs only after all the HTML, CSS, and JavaScript resources have been fully loaded. It ensures that all of the external resources, like images, are fully loaded before code executes. Since this code dynamically creates elements and sets their properties based on fetched data, we need to wait for all resources to be available to ensure everything renders correctly. Will slow down initial load time as pokemonCount gets bigger.
+    const promises = []; 
+    
+    for (let i = 1;i<=pokemonCount;i++) {
+        promises.push(getPokemon(i));
+    } // resulting promise from getPokemon() is pushed into this array.
+   
+    Promise.all(promises).then(() => { // waits for all promises to resolve and then executes this callback function and each pokemon is rendered by creating a div for each pokemon and adding event listeners etc. This ensures that the pokemon list is not rendered until all data is available.
+        // console.log(pokedex);
+        for (let i=1;i<=pokemonCount;i++) {
+            let pokemon = document.createElement("div");
+            pokemon.id = pokedex[i].id
+            pokemon.innerText = i.toString() + ". " + pokedex[i]["name"].toUpperCase();
+            pokemon.classList.add("pokemon-name");
+            pokemon.addEventListener("click", updatePokemon);
+            document.getElementById("pokemon-list").append(pokemon);
 
-    // console.log(pokemonDesc);
-    pokemonDesc = pokemonDesc["flavor_text_entries"][9]["flavor_text"];
+        };
+            let imageElement = document.getElementById("pokemon-img");
+            imageElement.addEventListener("mouseover", updateImage);
+            imageElement.src = pokedex[1]["img"]; 
 
-    pokedex[num] = {"name" : pokemonName, "img" : pokemonImg, "types" : pokemonType, "desc" : pokemonDesc};
-
-}
-
-function updatePokemon(){
-    document.getElementById("pokemon-img").src = pokedex[this.id]["img"];
-
-    //clear previous type
-    let typesDiv = document.getElementById("pokemon-types");
-    while (typesDiv.firstChild) {
-        typesDiv.firstChild.remove();
+            document.getElementById("pokemon-description").innerText = pokedex[1]["desc"];
+        });
+    };
+    
+    function updatePokemon(e) {
+        selectedPokemon = pokedex[e.target.id]
+        
+        //highlight selected Pokemon as blue - see style.css
+        const previousSelected = document.querySelector('.selected');
+        if (previousSelected) {
+            previousSelected.classList.remove('selected');
+        } e.target.classList.add('selected'); 
+        
+        document.getElementById("pokemon-img").src = pokedex[e.target.id]["img"];
+        
+        //clear previous type
+        let typesDiv = document.getElementById("pokemon-types");
+        while (typesDiv.firstChild) {
+            typesDiv.firstChild.remove();
+        };
+        //update type
+        let types = pokedex[e.target.id]["types"];
+        for (let i = 0;i< types.length; i++) {
+            let type = document.createElement("span");
+            type.innerText = types[i].toUpperCase();
+            type.classList.add("type-box");
+            type.classList.add(types[i]);
+            typesDiv.append(type);
+        };
+        //update description
+        document.getElementById("pokemon-description").innerText = pokedex[e.target.id]["desc"];
     }
-
-    //update types
-    let types = pokedex[this.id]["types"];
-    for (let i = 0; i < types.length; i++) {
-        let type = document.createElement("span");
-        type.innerText = types[i]["type"]["name"].toUpperCase();
-        type.classList.add("type-box");
-        type.classList.add(types[i]["type"]["name"]); //adds background color and font color
-        typesDiv.append(type);
-    }
-
-    //update description
-    document.getElementById("pokemon-description").innerText = pokedex[this.id]["desc"];
-}
+    
+    function updateImage() {
+        let backImageElement = document.getElementById("pokemon-img");
+        let imageElement = document.getElementById("pokemon-img");
+        
+        if (Object.keys(selectedPokemon).length === 0) {
+          backImageElement.src = pokedex[1]["backImg"];
+        } else {
+          backImageElement.src = selectedPokemon["backImg"];
+        }
+      
+        imageElement.addEventListener("mouseleave", function () {
+          if (Object.keys(selectedPokemon).length === 0) {
+            imageElement.src = pokedex[1]["img"];
+          } else {
+            imageElement.src = selectedPokemon["img"];
+          }
+        });
+      }
