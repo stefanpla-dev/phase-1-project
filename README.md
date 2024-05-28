@@ -17,3 +17,7 @@ Fulfillment of Project Requirements:
 4. We use two instances of array iteration in this app. You can find those examples in the index.js file at lines 17 and 25, respectively. These were necessary to iterate over the dataset to both pull the Pokemon's typing as well as pull an English language description of each Pokemon, contained at a different API endpoint than the rest of the dataset.
 
 5. The final requirement is that we maintain good coding best practices. For better or worse, someone else will have to be the judge of that.
+
+Stefan's CSS Updates as of 5/28/24:
+
+During the project we were a little strapped for time and wound up mounting the HTML and JavaScript on top of an image of a Pokedex instead of designing one using CSS. I've returned to do so after resisting the design aspect of web development for more or less the entire time I spent at Flatiron so that I might force myself to learn a thing or two.

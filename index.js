@@ -1,4 +1,4 @@
-const pokemonCount = 151;
+const pokemonCount = 300;
 // can change the number above to load different number of Pokemon into the Pokedex. 
 
 const pokedex = {}; // using Bulbasaur as an example: {"name" : "bulbasaur", "img" : url, "type" : ["grass","poison"], "desc" : "....."} }
